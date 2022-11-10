@@ -1,0 +1,6 @@
+2022/11/03-18:35:31.290 404 Reusing MANIFEST /home/sahib/.config/discord/Local Storage/leveldb/MANIFEST-000001
+2022/11/03-18:35:31.290 404 Recovering log #19
+2022/11/03-18:35:31.291 404 Reusing old log /home/sahib/.config/discord/Local Storage/leveldb/000019.log 
+2022/11/03-19:09:32.365 693c Level-0 table #23: started
+2022/11/03-19:09:32.418 693c Level-0 table #23: 13352 bytes OK
+2022/11/03-19:09:32.423 693c Delete type=0 #19

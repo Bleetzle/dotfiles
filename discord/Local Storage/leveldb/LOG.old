@@ -1,0 +1,8 @@
+2022/11/03-18:30:51.506 3d0 Reusing MANIFEST /home/sahib/.config/discord/Local Storage/leveldb/MANIFEST-000001
+2022/11/03-18:30:51.507 3d0 Recovering log #13
+2022/11/03-18:30:51.516 3d0 Level-0 table #17: started
+2022/11/03-18:30:51.530 3d0 Level-0 table #17: 1108992 bytes OK
+2022/11/03-18:30:51.534 3d0 Delete type=0 #13
+2022/11/03-18:33:01.612 3d0 Level-0 table #20: started
+2022/11/03-18:33:01.637 3d0 Level-0 table #20: 1180204 bytes OK
+2022/11/03-18:33:01.640 3d0 Delete type=0 #18
