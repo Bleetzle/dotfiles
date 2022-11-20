@@ -67,32 +67,30 @@ keys = [
     Key([mod], "i", lazy.window.toggle_floating(), desc="Toggle floating mode for a window"),
 ]
 
-groupname = ["I","II","III","IV","V","VI","VII","VIII","IX","X"]
-groups = [Group(i) for i in "1234567890"]
+
+groups = [Group(f"{i+1}", label="") for i in range(4)]
 
 for i in groups:
     keys.extend(
-        [
-            # mod1 + letter of group = switch to group
-            Key(
-                [mod],
-                i.name,
-                lazy.group[i.name].toscreen(),
-                desc="Switch to group {}".format(i.name),
-            ),
-            # mod1 + shift + letter of group = switch to & move focused window to group
-            Key(
-                [mod, "shift"],
-                i.name,
-                lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch to & move focused window to group {}".format(i.name),
-            ),
-            # Or, use below if you prefer not to switch to that group.
-            # # mod1 + shift + letter of group = move focused window to group
-            # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-            #     desc="move focused window to group {}".format(i.name)),
-        ]
-    )
+            [
+                Key(
+                    [mod],
+                    i.name,
+                    lazy.group[i.name].toscreen(),
+                    desc="Switch to group {}".format(i.name),
+                    ),
+                Key(
+                    [mod, "shift"],
+                    i.name,
+                    lazy.window.togroup(i.name, switch_group=True),
+                    desc="Switch to & move focused window to group {}".format(i.name),
+                    ),
+                ]
+            )
+
+
+
+
 
 layouts = [
     #layout.Columns(border_focus_stack=["#E73131", "#E73131"], border_width=1,margin=7),
@@ -100,7 +98,7 @@ layouts = [
     # layout.Stack(num_stacks=2),
     #layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(border_focus_stack=["#E73131", "#E73131"], border_width=1,margin=15),
+    layout.MonadTall(border_focus_stack=["#E73131", "#E73131"], border_width=1,margin=10),
     # layout.MonadWide(),
     layout.Max(),
     #layout.RatioTile(),
@@ -113,8 +111,9 @@ layouts = [
 widget_defaults = dict(
     font="JetBrains Mono Medium Nerd Fornt Complete",
     fontsize=14,
-    padding=3,
+    padding=7,
     background="#111318",
+    foreground="#E6E6E6",
 )
 extension_defaults = widget_defaults.copy()
 
@@ -122,30 +121,45 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.CurrentLayoutIcon(),
-                widget.GroupBox(highlight_method='block',this_current_screen_border='800F0F'),
+                #widget.CurrentLayoutIcon(),
+                widget.GroupBox(
+                    borderwidth=3,
+                    highlight_method='block',
+                    active='#E73131',
+                    block_highlight_text_color="#e6e6e6",
+                    highlight_color='#E73131',
+                    inactive='#e6e6e6',
+                    this_current_screen_border='#e73131',
+                    rounded=True,
+                    disable_drag=True,
+                ),
                 widget.WindowName(),
-                #widget.Spacer(),
-                
-
-                widget.Sep(),
+                widget.Spacer(),
                 widget.Systray(),
                 widget.OpenWeather(location='London', format='{location_city}: {icon} {main_temp} °{units_temperature} {weather_details}'),
                 widget.Sep(),
-                widget.Battery(low_percentage=0.25,low_foreground='e73131',format='Battery: {char} {percent:2.0%}'),
-                widget.Sep(),
-                widget.CPU(format='CPU: {load_percent}%'),
-                widget.ThermalSensor(format='{temp:.0f}{unit}'),
+                widget.CPU(format=' CPU: {load_percent}%'),
+                widget.ThermalSensor(format=' {temp:.0f}{unit}',update_interval=10),
+                 widget.Memory(format='﬙{MemUsed: .0f}{mm}',measure_mem='G'),
                 #widget.Memory(measure_mem='G'),
                 widget.Sep(),
                 widget.Volume(fmt=' {}'),
                 widget.Sep(),
                 widget.Wlan(format='{essid}',disconnected_message='睊'),
-                widget.Net(format='V{down}  ^{up}',prefix='M'),
+                widget.Net(format=' {down}    {up}',prefix='M'),
                 widget.Sep(),
-                widget.Clock(format=" %a %X (%Z) %d/%m/%Y "),
+                widget.Battery(
+                    low_percentage=0.25,
+                    low_background='#e73131',
+                    low_foreground='#111318',
+                    format=' {char}  {percent:2.0%}',
+                    discharge_char=' ',
+                    charge_char='',
+                    ),
+                widget.Sep(),
+                widget.Clock(format="  %X     %d/%m/%Y "),
             ],
-            24,margin=[10,10,0,10]
+            30,margin=[10,10,0,10]
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
           #  border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
