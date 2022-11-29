@@ -6,6 +6,9 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.log_utils import logger
+from qtile_extras import widget
+from qtile_extras.widget.decorations import PowerLineDecoration, RectDecoration
+
 mod = "mod4"
 terminal = "kitty"
 wmname = "qtile"
@@ -13,6 +16,13 @@ browser = "librewolf"
 alt = "mod1"
 home = os.path.expanduser('~')
 nightmode = False
+
+# [Colours]
+dark_red = '#800F0F'
+bg_colour = '#111318'
+gold = '#FFB238'
+bright_red = '#E73131'
+white = '#E6E6E6'
 
 keys = [
     # Switch between windows
@@ -68,7 +78,7 @@ keys = [
 ]
 
 
-groups = [Group(f"{i+1}", label="") for i in range(4)]
+groups = [Group(f"{i+1}", label=" ") for i in range(4)]
 
 for i in groups:
     keys.extend(
@@ -109,13 +119,17 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="JetBrains Mono Medium Nerd Fornt Complete",
+    font="JetBrainsMono Nerd Font",
     fontsize=14,
-    padding=7,
-    background="#111318",
-    foreground="#E6E6E6",
-)
+    padding=10,
+    )
 extension_defaults = widget_defaults.copy()
+
+decoration_group = {
+    "decorations": [
+        RectDecoration(colour=bg_colour,radius=15, filled=True, group=True,clip=True), 
+        ],
+}
 
 screens = [
     Screen(
@@ -125,41 +139,67 @@ screens = [
                 widget.GroupBox(
                     borderwidth=3,
                     highlight_method='block',
-                    active='#E73131',
-                    block_highlight_text_color="#e6e6e6",
-                    highlight_color='#E73131',
-                    inactive='#e6e6e6',
-                    this_current_screen_border='#e73131',
+                    active=dark_red,
+                    block_highlight_text_color=gold,
+                    highlight_color=dark_red,
+                    inactive=white,
+                    this_current_screen_border=dark_red,
                     rounded=True,
                     disable_drag=True,
+                    **decoration_group
                 ),
-                widget.WindowName(),
+                #widget.WindowName(),
+                widget.Spacer(length=5),
+                widget.TextBox(
+                    text="",
+                    foreground=gold,
+                    **decoration_group,
+                    ),
+                widget.CPU(format='{load_percent}%',**decoration_group),
+                widget.TextBox(text="",foreground=gold,**decoration_group),
+                widget.ThermalSensor(format='{temp:.0f}{unit}',update_interval=10,**decoration_group),
+                widget.TextBox(text="﬙",foreground=gold,**decoration_group),
+                widget.Memory(format='{MemUsed: .0f}{mm}',measure_mem='G',**decoration_group),
                 widget.Spacer(),
                 widget.Systray(),
-                widget.OpenWeather(location='London', format='{location_city}: {icon} {main_temp} °{units_temperature} {weather_details}'),
-                widget.Sep(),
-                widget.CPU(format=' CPU: {load_percent}%'),
-                widget.ThermalSensor(format=' {temp:.0f}{unit}',update_interval=10),
-                 widget.Memory(format='﬙{MemUsed: .0f}{mm}',measure_mem='G'),
-                #widget.Memory(measure_mem='G'),
-                widget.Sep(),
-                widget.Volume(fmt=' {}'),
-                widget.Sep(),
-                widget.Wlan(format='{essid}',disconnected_message='睊'),
-                widget.Net(format=' {down}    {up}',prefix='M'),
-                widget.Sep(),
+                widget.OpenWeather(location='London',
+                                   format='{icon} {main_temp} °{units_temperature} {weather_details}',
+                                   **decoration_group,
+                                   ),
+                widget.Spacer(),
+                #widget.Visualiser(bar_colour=gold,bar_height=40,hide=True,**decoration_group),
+                widget.WiFiIcon(active_colour=gold,disconnected_colour=bright_red,**decoration_group),
+                #widget.Wlan(
+                #    format='{essid}',
+                #    disconnected_message='睊',
+                #    foreground=gold,
+                #    **decoration_group,
+                #    ),
+                widget.Net(format=' {down}    {up}',prefix='M',**decoration_group),
+                widget.Spacer(length=5),
+                widget.TextBox(text="",foreground=gold,**decoration_group),
+                widget.Volume(**decoration_group),
+                widget.Spacer(length=5),
+                #widget.TextBox(text="",foreground=gold,**decoration_group),
+                widget.UPowerWidget(border_colour=gold,
+                                    border_critical_colour=bright_red,
+                                    fill_critical=bright_red,
+                                    fill_low=dark_red,
+                                    fill_normal=gold,
+                                    margin=10,
+                                    **decoration_group),
                 widget.Battery(
-                    low_percentage=0.25,
-                    low_background='#e73131',
-                    low_foreground='#111318',
-                    format=' {char}  {percent:2.0%}',
-                    discharge_char=' ',
+                    low_percentage=0.10,
+                    format='{char}  {percent:2.0%}',
+                    discharge_char='',
                     charge_char='',
+                    **decoration_group,
                     ),
-                widget.Sep(),
-                widget.Clock(format="  %X     %d/%m/%Y "),
+                widget.Spacer(length=5),
+                widget.Clock(format="  %X",foreground=gold,**decoration_group),
+                widget.Clock(format="  %d/%m/%Y",**decoration_group),
             ],
-            30,margin=[10,10,0,10]
+            30,margin=[10,10,0,10],background="#00000000",
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
           #  border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
